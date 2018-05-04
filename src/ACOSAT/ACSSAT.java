@@ -1,7 +1,9 @@
 package ACOSAT;
 
-import ACOAbstract.ACSAbstract;
+import ACOAbstract.ACS;
 import ACOAbstract.Ant;
+import ACOSAT.Ant.ACSAntSAT;
+import ACOSAT.Ant.AntSAT;
 import SATDpendencies.SATInstance;
 import SATDpendencies.SATSolution;
 
@@ -9,50 +11,34 @@ import SATDpendencies.SATSolution;
  * CREATED BY wiss ON 10:35
  **/
 
-public class ACSSAT extends ACSAbstract<SATSolution>
+public class ACSSAT extends ACS<SATSolution>
 {
     private double ro;
     private double alpha;
     private double beta;
     private double initValue;
+    private double q;
     private SATInstance instance;
 
-    public ACSSAT(int numberOfAnts, double initValue, int MAXITER, double ro, double alpha, double beta, SATInstance instance) throws Exception
+    public ACSSAT(int numberOfAnts, double initValue, int MAXITER, double ro, double alpha, double beta, double q, SATInstance instance) throws Exception
     {
         super(numberOfAnts, MAXITER);
         this.initValue = initValue;
         this.ro = ro;
         this.alpha = alpha;
         this.beta = beta;
+        this.q = q;
         this.instance = instance;
         PheromonsSAT pheromons = new PheromonsSAT(instance.getNumberOfVariables(), initValue, ro, alpha, beta);
         for (int i = 0; i < numberOfAnts; i++)
         {
-            ACSAntSAT ant = new ACSAntSAT(instance);
+            ACSAntSAT ant = new ACSAntSAT(instance, q);
             ant.getInstance().setPheromons(pheromons);
             ants.add(ant);
         }
 
     }
 
-    @Override
-    public ACSAntSAT getBestAnt()
-    {
-        ACSAntSAT bestSoFar = (ACSAntSAT) ants.getFirst();
-        for (Ant<SATSolution> ant : ants)
-        {
-            if (ant.solution.getEvaluation() < ant.solution.getEvaluation())
-                bestSoFar = (ACSAntSAT) ant;
-        }
-        return bestSoFar;
-    }
-
-
-    @Override
-    protected boolean end(SATSolution solution)
-    {
-        return (isValidSolution(solution) || numberOfItterations++ > MAXITER);
-    }
 
 
     @Override
@@ -70,16 +56,10 @@ public class ACSSAT extends ACSAbstract<SATSolution>
             {
                 double Ti = instance.getPheromons().getPheromonValues()[i][j];
                 instance.getPheromons().getPheromonValues()[i][j] = (1 - instance.getPheromons().getRo()) * Ti + instance.getPheromons().getRo() *
-                        getDelta(bestAnt, j, i);
+                        ((AntSAT) bestAnt).getDelta(i, j);
 
             }
         }
-    }
-
-    public double getDelta(Ant<SATSolution> bestAnt, int variable, int literal)
-    {
-        return (double) bestAnt.solution.getEvaluation();
-
     }
 
 

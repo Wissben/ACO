@@ -1,12 +1,13 @@
 package ACOAbstract;
 
 /**
- * CREATED BY wiss ON 00:25
+ * CREATED BY wiss ON 22:35
  **/
 
-public abstract class ASAbstract<T> extends ACOAbstract<T>
+public abstract class ACS<T> extends ACO<T>
 {
-    public ASAbstract(int numberOfAnts, int MAXITER)
+
+    public ACS(int numberOfAnts, int MAXITER)
     {
         super(numberOfAnts, MAXITER);
     }
@@ -20,17 +21,23 @@ public abstract class ASAbstract<T> extends ACOAbstract<T>
             for (Ant<T> ant : ants)
             {
                 ant.constructSolution();
-//                ant.improveSolution();
 //                ant.exploreNeighbors();
+//                ant.improveSolution();
+                if (isValidSolution(ant.solution))
+                {
+                    return ant.solution;
+                }
+
             }
             Ant<T> bestAnt = getBestAnt();
+            offlinePheromonUpdate(bestAnt);
             if (end(bestAnt.solution))
             {
-                System.out.println(bestAnt.solution);
                 return bestAnt.solution;
             }
         }
     }
+
 
     public abstract void offlinePheromonUpdate(Ant<T> bestAnt);
 

@@ -1,11 +1,11 @@
-package ACOSAT;
+package ACOSAT.Ant;
 
 import ACOAbstract.Ant;
 import SATDpendencies.SATInstance;
 import SATDpendencies.SATSolution;
 import SATDpendencies.SATTabuSearch;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
 
 /**
@@ -49,23 +49,20 @@ public abstract class AntSAT extends Ant<SATSolution>
 
     protected double getPherHeur(int variable, int literal)
     {
-        double mu = (double) instance.getLiteralsBitSet()[literal][variable].cardinality() / instance.getNumberOfClauses();
-        double muAlpha = Math.pow(mu, instance.getPheromons().getAlpha());
+        double mu = (double) (instance.getNumberOfClauses() - instance.getLiteralsBitSet()[literal][variable].cardinality()) / instance.getNumberOfClauses();
+        double muBeta = Math.pow(mu, instance.getPheromons().getBeta());
 //        System.out.println("alpha " + muAlpha);
         double ti = (double) instance.getPheromons().getPheromonValues()[variable][literal];
-        double tiBeta = Math.pow(ti, instance.getPheromons().getBeta());
+        double tiAlpha = Math.pow(ti, instance.getPheromons().getAlpha());
 //        System.out.println("BETA " + tiBeta * muAlpha);
-        return tiBeta * muAlpha;
+        return tiAlpha * muBeta;
     }
 
 
     @Override
     public int compareTo(Ant<SATSolution> o)
     {
-        //TODO USE IT Leul
-        if (this.solution.getEvaluation() < o.solution.getEvaluation()) return -1;
-        if (this.solution.getEvaluation() > o.solution.getEvaluation()) return 1;
-        return 0;
+        return Double.compare(this.solution.getEvaluation(), o.solution.getEvaluation());
     }
 
 
@@ -74,14 +71,14 @@ public abstract class AntSAT extends Ant<SATSolution>
     {
         Random rand = new Random();
         SATSolution newS = this.solution.copy();
-        ArrayList<Integer> unsatisfied = solution.getUnsatisfiedClauses();
+        LinkedList<Integer> unsatisfied = solution.getUnsatisfiedClauses();
 //        System.out.println(solution);
 //        System.out.println(unsatisfied);
 //        System.out.println(this.solution.getEvaluation());
         if (unsatisfied.size() > 0)
         {
             int clause = unsatisfied.get(rand.nextInt(unsatisfied.size()));
-            ArrayList<Integer> varsOfUnsatisfied = solution.getVariablesOfClause(clause);
+            LinkedList<Integer> varsOfUnsatisfied = solution.getVariablesOfClause(clause);
             int var = varsOfUnsatisfied.get(rand.nextInt(varsOfUnsatisfied.size()));
             newS.flip(var);
             if (newS.getEvaluation() < solution.getEvaluation())
@@ -90,6 +87,11 @@ public abstract class AntSAT extends Ant<SATSolution>
 
     }
 
+    public double getDelta(int variable, int literal)
+    {
+        return (double) (instance.getLiteralsBitSet()[literal][variable].cardinality());
+
+    }
 
     public SATInstance getInstance()
     {

@@ -1,13 +1,13 @@
 package SATDpendencies;
 
-import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.LinkedList;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by ressay on 29/03/18.
  */
-public class SATSolution implements Cloneable
+public class SATSolution
 {
     private BitSet values;
     private SATInstance instance;
@@ -18,20 +18,6 @@ public class SATSolution implements Cloneable
         this.instance = instance;
         values = new BitSet(instance.getNumberOfVariables());
     }
-
-
-//    public SATSolution clone()
-//    {
-//        SATSolution o = null;
-//        try
-//        {
-//            o = (SATSolution) super.clone();
-//        } catch (CloneNotSupportedException cnse)
-//        {
-//            cnse.printStackTrace(System.err);
-//        }
-//        return o;
-//    }
 
     public static SATSolution generateRandomSolution(SATInstance instance)
     {
@@ -47,9 +33,9 @@ public class SATSolution implements Cloneable
     }
 
 
-    public ArrayList<Integer> getVariablesOfClause(int clause)
+    public LinkedList<Integer> getVariablesOfClause(int clause)
     {
-        ArrayList<Integer> vars = new ArrayList<>();
+        LinkedList<Integer> vars = new LinkedList<>();
         for (int i = 0; i < this.length(); i++)
         {
             int invLit = get(i) ? 0 : 1;
@@ -60,9 +46,9 @@ public class SATSolution implements Cloneable
     }
 
 
-    public ArrayList<Integer> getUnsatisfiedClauses()
+    public LinkedList<Integer> getUnsatisfiedClauses()
     {
-        ArrayList<Integer> unsatisfied = new ArrayList<>();
+        LinkedList<Integer> unsatisfied = new LinkedList<>();
         for (int i = 0; i < instance.getNumberOfClauses(); i++)
         {
             if (clauseSatisfied(i))

@@ -6,12 +6,10 @@ package ACOSAT;
 
 public class PheromonsSAT extends ACOAbstract.Pheromons<Double, Double[][]>
 {
-    //    private double[][] pheromonValues;
     private double ro; // evaporation rate
     private double to;
     private double alpha;
     private double beta;
-
     public PheromonsSAT(int numberOfVariables, double initValue, double ro, double alpha, double beta)
     {
         super(initValue);
@@ -32,8 +30,6 @@ public class PheromonsSAT extends ACOAbstract.Pheromons<Double, Double[][]>
             for (int j = 0; j < pheromonValues[i].length; j++)
             {
                 pheromonValues[i][j] = initValue;
-                //Testing
-//                pheromonValues[i][j] = (double) initValue / (i);
             }
         }
     }

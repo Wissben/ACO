@@ -1,4 +1,4 @@
-package ACOSAT;
+package ACOSAT.Ant;
 
 import SATDpendencies.SATInstance;
 
@@ -12,10 +12,12 @@ import java.util.concurrent.ThreadLocalRandom;
 public class ACSAntSAT extends AntSAT
 {
     private double[][] addedPheromons;
+    private double qProba;
 
-    public ACSAntSAT(SATInstance instance)
+    public ACSAntSAT(SATInstance instance, double qProba)
     {
         super(instance);
+        this.qProba = qProba;
         this.addedPheromons = new double[instance.getLiteralsBitSet()[0].length][2];
     }
 
@@ -33,15 +35,20 @@ public class ACSAntSAT extends AntSAT
             double q = ThreadLocalRandom.current().nextDouble();
 //            System.out.println("PROBA " + proba + " PROBA NOT " + probaNot + " GOT " + q);
 
-            if (q <= 0.9)
+            if (q <= qProba)
             {
-
                 int[] argmax = getArgmax();
                 done[argmax[1]] = true;
+                System.out.println(argmax[0]);
                 if (argmax[0] == 1)
+                {
                     solution.set(argmax[1]);
+                }
                 else
+                {
+                    System.out.println("CHOSED EXPLOITATION");
                     solution.clear(argmax[1]);
+                }
             } else
             {
                 done[i] = true;
@@ -52,6 +59,7 @@ public class ACSAntSAT extends AntSAT
                     onlineStepByStepPheromonUpdate(i, 1);
                 } else
                 {
+                    System.out.println("CHOSED exploration ");
                     solution.clear(i);
                     onlineStepByStepPheromonUpdate(i, 0);
                 }
@@ -59,7 +67,7 @@ public class ACSAntSAT extends AntSAT
         }
     }
 
-    public int[] getArgmax()
+    private int[] getArgmax()
     {
 
         int[] argMax = {0, 0};
@@ -69,7 +77,7 @@ public class ACSAntSAT extends AntSAT
             for (int j = 0; j < literals[i].length; j++)
             {
 
-                if (getPherHeur(j, i) > getPherHeur(argMax[1], argMax[0]))
+                if (getPherHeur(j, i) >= getPherHeur(argMax[1], argMax[0]))
                 {
                     argMax[0] = i;
                     argMax[1] = j;
@@ -80,7 +88,7 @@ public class ACSAntSAT extends AntSAT
     }
 
 
-    public void onlineStepByStepPheromonUpdate(int variable, int literal)
+    private void onlineStepByStepPheromonUpdate(int variable, int literal)
     {
         double Ti = instance.getPheromons().getPheromonValues()[variable][literal];
         double cost = variable;
