@@ -1,4 +1,4 @@
-package SATII;
+package SATDpendencies;
 
 import java.util.ArrayList;
 import java.util.BitSet;

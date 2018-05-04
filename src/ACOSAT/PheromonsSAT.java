@@ -1,10 +1,10 @@
-package SATII;
+package ACOSAT;
 
 /**
  * CREATED BY wiss ON 10:44
  **/
 
-public class PheromonsSAT extends ACO.Pheromons<Double, Double[][]>
+public class PheromonsSAT extends ACOAbstract.Pheromons<Double, Double[][]>
 {
     //    private double[][] pheromonValues;
     private double ro; // evaporation rate

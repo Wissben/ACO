@@ -1,7 +1,9 @@
-package SATII;
+package ACOSAT;
 
-import ACO.ACSAbstract;
-import ACO.Ant;
+import ACOAbstract.ACSAbstract;
+import ACOAbstract.Ant;
+import SATDpendencies.SATInstance;
+import SATDpendencies.SATSolution;
 
 /**
  * CREATED BY wiss ON 10:35

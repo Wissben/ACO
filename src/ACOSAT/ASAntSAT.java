@@ -1,4 +1,6 @@
-package SATII;
+package ACOSAT;
+
+import SATDpendencies.SATInstance;
 
 /**
  * CREATED BY wiss ON 01:20

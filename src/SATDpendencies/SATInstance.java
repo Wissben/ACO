@@ -1,4 +1,6 @@
-package SATII;
+package SATDpendencies;
+
+import ACOSAT.PheromonsSAT;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

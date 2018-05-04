@@ -1,4 +1,6 @@
-package SATII;
+package ACOSAT;
+
+import SATDpendencies.SATInstance;
 
 import java.util.BitSet;
 import java.util.concurrent.ThreadLocalRandom;

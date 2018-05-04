@@ -1,6 +1,9 @@
-package SATII;
+package ACOSAT;
 
-import ACO.Ant;
+import ACOAbstract.Ant;
+import SATDpendencies.SATInstance;
+import SATDpendencies.SATSolution;
+import SATDpendencies.SATTabuSearch;
 
 import java.util.ArrayList;
 import java.util.Random;

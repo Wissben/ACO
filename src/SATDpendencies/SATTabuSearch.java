@@ -1,4 +1,4 @@
-package SATII;
+package SATDpendencies;
 
 import MetaHeuristics.TabuSearch;
 

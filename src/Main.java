@@ -1,6 +1,6 @@
-import SATII.ACSSAT;
-import SATII.SATInstance;
-import SATII.SATSolution;
+import ACOSAT.ACSSAT;
+import SATDpendencies.SATInstance;
+import SATDpendencies.SATSolution;
 
 /**
  * CREATED BY wiss ON 14:34
