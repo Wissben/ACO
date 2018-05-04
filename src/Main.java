@@ -1,5 +1,6 @@
 import SATII.ACSSAT;
 import SATII.SATInstance;
+import SATII.SATSolution;
 
 /**
  * CREATED BY wiss ON 14:34
@@ -10,9 +11,9 @@ public class Main
 
     public static void main(String[] args) throws Exception
     {
-        var instance = SATInstance.loadClausesFromDimacs("/home/wiss/CODES/TP-MetaHeuristic/ACO/Benchmarks/uf75-01.cnf");
+        SATInstance instance = SATInstance.loadClausesFromDimacs("/home/wiss/CODES/TP-MetaHeuristic/ACO/Benchmarks/uf75-01.cnf");
         ACSSAT ACSSAT = new ACSSAT(30, 0.1, 160, 0.7, 1, 0, instance);
-        var solution = ACSSAT.startResearch();
+        SATSolution solution = ACSSAT.startResearch();
         System.out.println("SOLUTION IS \n" + solution);
         System.out.println(solution.getEvaluation());
 //        var sol = SATSolution.generateRandomSolution(instance);
