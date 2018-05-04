@@ -94,18 +94,21 @@ public class SATSolution
     public SATSolution flip(int index)
     {
         values.flip(index);
+        evaluation = -1;
         return this;
     }
 
     public SATSolution set(int index)
     {
         values.set(index);
+        evaluation = -1;
         return this;
     }
 
     public SATSolution clear(int index)
     {
         values.clear(index);
+        evaluation = -1;
         return this;
     }
 
@@ -157,7 +160,7 @@ public class SATSolution
 
     public double getEvaluation()
     {
-        if (evaluation == -1)
+//        if (evaluation == -1)
             evaluation = instance.getNumberOfClauses() - instance.getNumberOfClausesSatisfied(this);
         return evaluation;
     }

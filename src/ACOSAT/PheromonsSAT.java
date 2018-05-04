@@ -10,6 +10,7 @@ public class PheromonsSAT extends ACOAbstract.Pheromons<Double, Double[][]>
     private double to;
     private double alpha;
     private double beta;
+
     public PheromonsSAT(int numberOfVariables, double initValue, double ro, double alpha, double beta)
     {
         super(initValue);
@@ -40,6 +41,21 @@ public class PheromonsSAT extends ACOAbstract.Pheromons<Double, Double[][]>
         return pheromonValues;
     }
 
+    @Override
+    public String toString()
+    {
+        String ret = "";
+        for (int i = 0; i < 2; i++)
+        {
+            ret += "[";
+            for (int j = 0; j < pheromonValues.length; j++)
+            {
+                ret += "'" + String.format("%.8f", pheromonValues[j][i]) + "' ,";
+            }
+            ret += "]\n";
+        }
+        return ret;
+    }
 
     public double getRo()
     {

@@ -21,8 +21,10 @@ public abstract class ACS<T> extends ACO<T>
             for (Ant<T> ant : ants)
             {
                 ant.constructSolution();
+                ant.improveSolution();
 //                ant.exploreNeighbors();
-//                ant.improveSolution();
+//                System.out.println("CURRENT2 " +evaluateSolution(ant.solution));
+                offlinePheromonUpdate(ant);
                 if (isValidSolution(ant.solution))
                 {
                     return ant.solution;
@@ -30,6 +32,7 @@ public abstract class ACS<T> extends ACO<T>
 
             }
             Ant<T> bestAnt = getBestAnt();
+//            System.out.println("THE BEST WAS " +bestAnt.solution);
             offlinePheromonUpdate(bestAnt);
             if (end(bestAnt.solution))
             {

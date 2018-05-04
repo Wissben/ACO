@@ -1,4 +1,4 @@
-package ACOSAT.Ant;
+package ACOSAT.AntSAT;
 
 import SATDpendencies.SATInstance;
 
@@ -8,9 +8,9 @@ import java.util.concurrent.ThreadLocalRandom;
  * CREATED BY wiss ON 01:20
  **/
 
-public class ASAntSAT extends AntSAT
+public class AntSATAS extends AntSAT
 {
-    public ASAntSAT(SATInstance instance)
+    public AntSATAS(SATInstance instance)
     {
         super(instance);
     }

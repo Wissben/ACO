@@ -1,4 +1,4 @@
-package ACOSAT.Ant;
+package ACOSAT.AntSAT;
 
 import ACOAbstract.Ant;
 import SATDpendencies.SATInstance;
@@ -33,7 +33,7 @@ public abstract class AntSAT extends Ant<SATSolution>
 
     public double getProba(int variable, int literal)
     {
-//        System.out.println("pherueur " + variable + "|" + literal + "=>" + getPherHeur(variable, literal) + "/total" + getTotalPherHeur(variable));
+//        System.out.println("pherueur " + variable + "|" + literal + "=>" + getPherHeur(variable, literal) + "/total " + getTotalPherHeur(variable));
         return (double) getPherHeur(variable, literal) / getTotalPherHeur(variable);
     }
 
@@ -49,12 +49,12 @@ public abstract class AntSAT extends Ant<SATSolution>
 
     protected double getPherHeur(int variable, int literal)
     {
-        double mu = (double) (instance.getNumberOfClauses() - instance.getLiteralsBitSet()[literal][variable].cardinality()) / instance.getNumberOfClauses();
+        double mu = (double) (instance.getNumberOfClauses() - instance.getLiteralsBitSet()[literal][variable].cardinality());/// instance.getNumberOfClauses();
         double muBeta = Math.pow(mu, instance.getPheromons().getBeta());
 //        System.out.println("alpha " + muAlpha);
         double ti = (double) instance.getPheromons().getPheromonValues()[variable][literal];
         double tiAlpha = Math.pow(ti, instance.getPheromons().getAlpha());
-//        System.out.println("BETA " + tiBeta * muAlpha);
+//        System.out.println("BETA " + muBeta);
         return tiAlpha * muBeta;
     }
 
@@ -82,7 +82,10 @@ public abstract class AntSAT extends Ant<SATSolution>
             int var = varsOfUnsatisfied.get(rand.nextInt(varsOfUnsatisfied.size()));
             newS.flip(var);
             if (newS.getEvaluation() < solution.getEvaluation())
+            {
+//                System.out.println("YES");
                 this.solution = newS;
+            }
         } else return;
 
     }

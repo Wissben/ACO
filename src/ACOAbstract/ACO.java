@@ -12,10 +12,11 @@ public abstract class ACO<T>
     protected LinkedList<Ant<T>> ants;
     protected int MAXITER;
     protected int numberOfAnts;
-    protected int numberOfItterations = 0;
+    protected int numberOfItterations;
 
     public ACO(int numberOfAnts, int MAXITER)
     {
+        this.numberOfItterations = 0;
         this.MAXITER = MAXITER;
         this.numberOfAnts = numberOfAnts;
         this.ants = new LinkedList<>();
@@ -34,10 +35,13 @@ public abstract class ACO<T>
 
     protected boolean end(T solution)
     {
-        return (isValidSolution(solution) || numberOfItterations++ > MAXITER);
+        numberOfItterations++;
+        return (isValidSolution(solution) || numberOfItterations >= MAXITER);
     }
 
     public abstract T startResearch();
 
     public abstract boolean isValidSolution(T solution);
+
+    public abstract double evaluateSolution(T solution);
 }

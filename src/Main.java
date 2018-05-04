@@ -12,25 +12,33 @@ public class Main
 
     public static void main(String[] args) throws Exception
     {
-        SATInstance instance = SATInstance.loadClausesFromDimacs("/home/wiss/CODES/TP-MetaHeuristic/ACO/Benchmarks/uf20-01.cnf");
-        SATSolution solution = launchACS(instance);
+        String path = "/home/wiss/CODES/TP-MetaHeuristic/ACO/Benchmarks/uf75-01.cnf";
+        SATInstance instance = SATInstance.loadClausesFromDimacs(path);
+        SATSolution solution = launchACS(30, 0.1, 160, 0.7, 1, 0, 0.9, instance);
+//        SATSolution solution = launchAS(30,0.1,200,0.7,1,0,instance);
         System.out.println("SOLUTION IS \n" + solution);
         System.out.println(solution.getEvaluation());
+        System.out.println(solution.getUnsatisfiedClauses());
 //        var sol = SATSolution.generateRandomSolution(instance);
-//        System.out.println(sol.getEvaluation());
 //        System.out.println(sol);
+//        System.out.println(sol.getEvaluation());
+//        System.out.println(sol.getUnsatisfiedClauses());
+//        sol.getValues().flip(0);
+//        sol.getValues().flip(4);
+//        System.out.println(sol);
+//        System.out.println(sol.getEvaluation());
 //        System.out.println(sol.getUnsatisfiedClauses());
     }
 
-    public static SATSolution launchACS(SATInstance instance) throws Exception
+    public static SATSolution launchACS(int numberOfAnts, double initValue, int MAXITTER, double ro, double alpha, double beta, double q, SATInstance instance) throws Exception
     {
-        ACSSAT acssat = new ACSSAT(30, 0.1, 200, 0.1, 2, 1, 0.9, instance);
+        ACSSAT acssat = new ACSSAT(numberOfAnts, initValue, MAXITTER, ro, alpha, beta, q, instance);
         return acssat.startResearch();
     }
 
-    public static SATSolution launchAS(SATInstance instance) throws Exception
+    public static SATSolution launchAS(int numberOfAnts, double initValue, int MAXITTER, double ro, double alpha, double beta, SATInstance instance) throws Exception
     {
-        ASSAT assat = new ASSAT(30, 0.1, 200, 0.1, 2, 1, instance);
+        ASSAT assat = new ASSAT(numberOfAnts, initValue, MAXITTER, ro, alpha, beta, instance);
         return assat.startResearch();
     }
 }

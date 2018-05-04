@@ -2,8 +2,8 @@ package ACOSAT;
 
 import ACOAbstract.ACS;
 import ACOAbstract.Ant;
-import ACOSAT.Ant.ACSAntSAT;
-import ACOSAT.Ant.AntSAT;
+import ACOSAT.AntSAT.AntSAT;
+import ACOSAT.AntSAT.AntSATACS;
 import SATDpendencies.SATInstance;
 import SATDpendencies.SATSolution;
 
@@ -32,7 +32,7 @@ public class ACSSAT extends ACS<SATSolution>
         PheromonsSAT pheromons = new PheromonsSAT(instance.getNumberOfVariables(), initValue, ro, alpha, beta);
         for (int i = 0; i < numberOfAnts; i++)
         {
-            ACSAntSAT ant = new ACSAntSAT(instance, q);
+            AntSATACS ant = new AntSATACS(instance, q);
             ant.getInstance().setPheromons(pheromons);
             ants.add(ant);
         }
@@ -40,6 +40,11 @@ public class ACSSAT extends ACS<SATSolution>
     }
 
 
+    @Override
+    public double evaluateSolution(SATSolution solution)
+    {
+        return solution.getEvaluation();
+    }
 
     @Override
     public boolean isValidSolution(SATSolution solution)
@@ -55,7 +60,7 @@ public class ACSSAT extends ACS<SATSolution>
             for (int j = 0; j < bestAnt.solution.getInstance().getPheromons().getPheromonValues()[i].length; j++)
             {
                 double Ti = instance.getPheromons().getPheromonValues()[i][j];
-                instance.getPheromons().getPheromonValues()[i][j] = (1 - instance.getPheromons().getRo()) * Ti + instance.getPheromons().getRo() *
+                bestAnt.solution.getInstance().getPheromons().getPheromonValues()[i][j] = (1 - bestAnt.solution.getInstance().getPheromons().getRo()) * Ti + bestAnt.solution.getInstance().getPheromons().getRo() *
                         ((AntSAT) bestAnt).getDelta(i, j);
 
             }

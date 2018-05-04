@@ -1,7 +1,7 @@
 package ACOSAT;
 
 import ACOAbstract.AS;
-import ACOSAT.Ant.ASAntSAT;
+import ACOSAT.AntSAT.AntSATAS;
 import SATDpendencies.SATInstance;
 import SATDpendencies.SATSolution;
 
@@ -28,11 +28,17 @@ public class ASSAT extends AS<SATSolution>
         PheromonsSAT pheromons = new PheromonsSAT(instance.getNumberOfVariables(), initValue, ro, alpha, beta);
         for (int i = 0; i < numberOfAnts; i++)
         {
-            ASAntSAT ant = new ASAntSAT(instance);
+            AntSATAS ant = new AntSATAS(instance);
             ant.getInstance().setPheromons(pheromons);
             ants.add(ant);
         }
 
+    }
+
+    @Override
+    public double evaluateSolution(SATSolution solution)
+    {
+        return solution.getEvaluation();
     }
 
     @Override

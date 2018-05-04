@@ -1,7 +1,8 @@
-package ACOSAT.Ant;
+package ACOSAT.AntSAT;
 
 import SATDpendencies.SATInstance;
 
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -9,27 +10,33 @@ import java.util.concurrent.ThreadLocalRandom;
  * CREATED BY wiss ON 00:36
  **/
 
-public class ACSAntSAT extends AntSAT
+public class AntSATACS extends AntSAT
 {
     private double[][] addedPheromons;
     private double qProba;
+    private boolean[] done;
 
-    public ACSAntSAT(SATInstance instance, double qProba)
+    public AntSATACS(SATInstance instance, double qProba)
     {
         super(instance);
         this.qProba = qProba;
         this.addedPheromons = new double[instance.getLiteralsBitSet()[0].length][2];
+        this.done = new boolean[instance.getNumberOfVariables()];
     }
 
     @Override
     public void constructSolution()
     {
 
-        boolean[] done = new boolean[solution.length()];
-        for (int i = 0; i < instance.getLiteralsBitSet()[0].length; i++)
+        Arrays.fill(done, Boolean.FALSE);
+//        System.out.println("BEFORE  => \n"+instance.getPheromons());
+        for (int i = 0; i < instance.getNumberOfVariables(); i++)
         {
             if (done[i])
+            {
+//                System.out.println("DONE WITH " + i + " BY " + this.toString());
                 continue;
+            }
             double proba = getProba(i, 1);
             double probaNot = getProba(i, 0);
             double q = ThreadLocalRandom.current().nextDouble();
@@ -38,19 +45,17 @@ public class ACSAntSAT extends AntSAT
             if (q <= qProba)
             {
                 int[] argmax = getArgmax();
-                done[argmax[1]] = true;
-                System.out.println(argmax[0]);
+//                System.out.println(argmax[1] + "=>" + argmax[0] + " BY " + this.toString());
                 if (argmax[0] == 1)
                 {
                     solution.set(argmax[1]);
-                }
-                else
+                } else
                 {
-                    System.out.println("CHOSED EXPLOITATION");
                     solution.clear(argmax[1]);
                 }
             } else
             {
+//                System.out.println(i+ "=> BY " + this.toString());
                 done[i] = true;
                 q = ThreadLocalRandom.current().nextDouble(1);
                 if (q < proba)
@@ -59,12 +64,15 @@ public class ACSAntSAT extends AntSAT
                     onlineStepByStepPheromonUpdate(i, 1);
                 } else
                 {
-                    System.out.println("CHOSED exploration ");
                     solution.clear(i);
                     onlineStepByStepPheromonUpdate(i, 0);
                 }
             }
         }
+//        System.out.println("AFTER  => \n"+instance.getPheromons());
+//        System.out.println(this);
+
+
     }
 
     private int[] getArgmax()
@@ -77,13 +85,15 @@ public class ACSAntSAT extends AntSAT
             for (int j = 0; j < literals[i].length; j++)
             {
 
-                if (getPherHeur(j, i) >= getPherHeur(argMax[1], argMax[0]))
+                if (!done[j] && getPherHeur(j, i) >= getPherHeur(argMax[1], argMax[0]))
                 {
+//                    System.out.println("MAX CHOSED IS " + j + "=>" + i);
                     argMax[0] = i;
                     argMax[1] = j;
                 }
             }
         }
+        done[argMax[1]] = true;
         return argMax;
     }
 
@@ -95,7 +105,7 @@ public class ACSAntSAT extends AntSAT
 //        var deltaTi = (double) 1 / cost;
 //        instance.getPheromonsSAT().getPheromonValues()[variable][literal] = (1 - instance.getPheromonsSAT().getRo()) * Ti;
         instance.getPheromons().getPheromonValues()[variable][literal] = (1 - instance.getPheromons().getRo()) * Ti + instance.getPheromons().getRo() * instance.getPheromons().getTo();
-        addedPheromons[variable][literal] = Ti - instance.getPheromons().getPheromonValues()[variable][literal];
+//        addedPheromons[variable][literal] = Ti - instance.getPheromons().getPheromonValues()[variable][literal];
     }
 
 
