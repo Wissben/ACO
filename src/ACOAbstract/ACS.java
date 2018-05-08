@@ -1,9 +1,16 @@
 package ACOAbstract;
 
+import java.util.TreeSet;
+
 /**
  * CREATED BY wiss ON 22:35
  **/
 
+/**
+ * Abstract behaviour of the ACS algorithm according to a solution of type T
+ *
+ * @param <T> the nature of the solution
+ */
 public abstract class ACS<T> extends ACO<T>
 {
 
@@ -18,13 +25,12 @@ public abstract class ACS<T> extends ACO<T>
         this.numberOfItterations = 0;
         for (; ; )
         {
+            ants = new TreeSet<>();
+            initAnts();
             for (Ant<T> ant : ants)
             {
                 ant.constructSolution();
-                ant.improveSolution();
-//                ant.exploreNeighbors();
-//                System.out.println("CURRENT2 " +evaluateSolution(ant.solution));
-                offlinePheromonUpdate(ant);
+                deamons(ant);
                 if (isValidSolution(ant.solution))
                 {
                     return ant.solution;
@@ -32,16 +38,29 @@ public abstract class ACS<T> extends ACO<T>
 
             }
             Ant<T> bestAnt = getBestAnt();
-//            System.out.println("THE BEST WAS " +bestAnt.solution);
-            offlinePheromonUpdate(bestAnt);
-            if (end(bestAnt.solution))
+            if (bestAnt.compareTo(this.bestAnt) < 0)
+                this.bestAnt = bestAnt;
+            System.out.println("THE BEST SO FAR IS " + evaluateSolution(this.bestAnt.solution));
+            offlinePheromonUpdate(this.bestAnt);
+            if (end(this.bestAnt.solution))
             {
-                return bestAnt.solution;
+                return this.bestAnt.solution;
             }
         }
     }
 
+    @Override
+    public void deamons(Ant<T> ant)
+    {
+        ant.exploreNeighbors();
+        ant.improveSolution();
+    }
 
+    /**
+     * Specific to the ACS algorithm
+     *
+     * @param bestAnt
+     */
     public abstract void offlinePheromonUpdate(Ant<T> bestAnt);
 
 }

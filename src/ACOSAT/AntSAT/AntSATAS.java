@@ -26,7 +26,6 @@ public class AntSATAS extends AntSAT
             double proba = getProba(i, 1);
             double probaNot = getProba(i, 0);
             double q = ThreadLocalRandom.current().nextDouble();
-//            System.out.println("PROBA " + proba + " PROBA NOT " + probaNot + " GOT " + q);
             done[i] = true;
             if (q < proba)
             {
@@ -34,7 +33,6 @@ public class AntSATAS extends AntSAT
                 onlineStepByStepPheromonUpdate(i, 1);
             } else
             {
-                System.out.println("CHOSED exploration ");
                 solution.clear(i);
                 onlineStepByStepPheromonUpdate(i, 0);
             }
@@ -45,8 +43,6 @@ public class AntSATAS extends AntSAT
     {
         double Ti = instance.getPheromons().getPheromonValues()[variable][literal];
         double cost = variable;
-//        var deltaTi = (double) 1 / cost;
-//        instance.getPheromonsSAT().getPheromonValues()[variable][literal] = (1 - instance.getPheromonsSAT().getRo()) * Ti;
         instance.getPheromons().getPheromonValues()[variable][literal] = (1 - instance.getPheromons().getRo()) * Ti +
                 instance.getPheromons().getRo() * this.getDelta(variable, literal);
     }

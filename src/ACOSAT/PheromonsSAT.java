@@ -18,7 +18,6 @@ public class PheromonsSAT extends ACOAbstract.Pheromons<Double, Double[][]>
         this.to = initValue;
         this.alpha = alpha;
         this.beta = beta;
-
         this.pheromonValues = new Double[numberOfVariables][2];
         init(initValue);
     }

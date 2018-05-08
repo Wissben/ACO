@@ -5,13 +5,17 @@ import SATDpendencies.SATInstance;
 import SATDpendencies.SATSolution;
 import SATDpendencies.SATTabuSearch;
 
-import java.util.LinkedList;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * CREATED BY wiss ON 22:05
  **/
 
+/**
+ * SAT problem implementation for an {@link Ant}
+ */
 public abstract class AntSAT extends Ant<SATSolution>
 {
     public static SATInstance instance;
@@ -33,7 +37,6 @@ public abstract class AntSAT extends Ant<SATSolution>
 
     public double getProba(int variable, int literal)
     {
-//        System.out.println("pherueur " + variable + "|" + literal + "=>" + getPherHeur(variable, literal) + "/total " + getTotalPherHeur(variable));
         return (double) getPherHeur(variable, literal) / getTotalPherHeur(variable);
     }
 
@@ -51,10 +54,8 @@ public abstract class AntSAT extends Ant<SATSolution>
     {
         double mu = (double) (instance.getNumberOfClauses() - instance.getLiteralsBitSet()[literal][variable].cardinality());/// instance.getNumberOfClauses();
         double muBeta = Math.pow(mu, instance.getPheromons().getBeta());
-//        System.out.println("alpha " + muAlpha);
         double ti = (double) instance.getPheromons().getPheromonValues()[variable][literal];
         double tiAlpha = Math.pow(ti, instance.getPheromons().getAlpha());
-//        System.out.println("BETA " + muBeta);
         return tiAlpha * muBeta;
     }
 
@@ -66,27 +67,40 @@ public abstract class AntSAT extends Ant<SATSolution>
     }
 
 
+    public static AntSAT generateRandomAnt(SATInstance instance)
+    {
+        return new AntSAT(instance)
+        {
+            @Override
+            public void constructSolution()
+            {
+                solution = SATSolution.generateRandomSolution(instance);
+            }
+        };
+    }
+
     @Override
     public void improveSolution()
     {
-        Random rand = new Random();
-        SATSolution newS = this.solution.copy();
-        LinkedList<Integer> unsatisfied = solution.getUnsatisfiedClauses();
-//        System.out.println(solution);
-//        System.out.println(unsatisfied);
-//        System.out.println(this.solution.getEvaluation());
-        if (unsatisfied.size() > 0)
+
+        for (int i = 0; i < 30; i++)
         {
-            int clause = unsatisfied.get(rand.nextInt(unsatisfied.size()));
-            LinkedList<Integer> varsOfUnsatisfied = solution.getVariablesOfClause(clause);
-            int var = varsOfUnsatisfied.get(rand.nextInt(varsOfUnsatisfied.size()));
-            newS.flip(var);
-            if (newS.getEvaluation() < solution.getEvaluation())
+            Random rand = new Random();
+            SATSolution newS = this.solution.copy();
+            TreeSet<Integer> unsatisfied = solution.getUnsatisfiedClauses();
+            if (unsatisfied.size() > 0)
             {
-//                System.out.println("YES");
-                this.solution = newS;
+                int clause = getRandomFromSet(unsatisfied);
+                TreeSet<Integer> varsOfUnsatisfied = solution.getVariablesOfClause(clause);
+                int var = getRandomFromSet(varsOfUnsatisfied);
+                newS.flip(var);
+                if (newS.getEvaluation() < solution.getEvaluation())
+                {
+                    System.out.println("YES");
+                    this.solution = newS;
+                }
             }
-        } else return;
+        }
 
     }
 
@@ -94,6 +108,28 @@ public abstract class AntSAT extends Ant<SATSolution>
     {
         return (double) (instance.getLiteralsBitSet()[literal][variable].cardinality());
 
+    }
+
+    /**
+     * private method to be used only internally
+     *
+     * @param unsatisfied
+     * @return random element of a {@link Set} of {@link Integer}
+     */
+    private Integer getRandomFromSet(Set<Integer> unsatisfied)
+    {
+        int size = unsatisfied.size();
+        int item = new Random().nextInt(size);
+        int index = 0;
+        for (Integer obj : unsatisfied)
+        {
+            if (index == item)
+            {
+                return obj;
+            }
+            index++;
+        }
+        return 0;
     }
 
     public SATInstance getInstance()
@@ -115,6 +151,5 @@ public abstract class AntSAT extends Ant<SATSolution>
     {
         this.solution = solution;
     }
-
 
 }

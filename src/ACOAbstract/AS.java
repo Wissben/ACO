@@ -1,5 +1,7 @@
 package ACOAbstract;
 
+import java.util.TreeSet;
+
 /**
  * CREATED BY wiss ON 00:25
  **/
@@ -17,20 +19,33 @@ public abstract class AS<T> extends ACO<T>
         this.numberOfItterations = 0;
         for (; ; )
         {
+            ants = new TreeSet<>();
+            initAnts();
             for (Ant<T> ant : ants)
             {
                 ant.constructSolution();
-//                ant.improveSolution();
-//                ant.exploreNeighbors();
+                deamons(ant);
+                if (isValidSolution(ant.solution))
+                {
+                    return ant.solution;
+                }
+
             }
             Ant<T> bestAnt = getBestAnt();
-            if (end(bestAnt.solution))
+            if (bestAnt.compareTo(this.bestAnt) < 0)
+                this.bestAnt = bestAnt;
+            System.out.println("THE BEST WAS " + evaluateSolution(this.bestAnt.solution));
+            if (end(this.bestAnt.solution))
             {
-                System.out.println(bestAnt.solution);
-                return bestAnt.solution;
+                return this.bestAnt.solution;
             }
         }
     }
 
+    public void deamons(Ant<T> ant)
+    {
+        ant.exploreNeighbors();
+        ant.improveSolution();
+    }
 
 }

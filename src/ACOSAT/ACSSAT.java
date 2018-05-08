@@ -30,12 +30,8 @@ public class ACSSAT extends ACS<SATSolution>
         this.q = q;
         this.instance = instance;
         PheromonsSAT pheromons = new PheromonsSAT(instance.getNumberOfVariables(), initValue, ro, alpha, beta);
-        for (int i = 0; i < numberOfAnts; i++)
-        {
-            AntSATACS ant = new AntSATACS(instance, q);
-            ant.getInstance().setPheromons(pheromons);
-            ants.add(ant);
-        }
+        this.instance.setPheromons(pheromons);
+        this.bestAnt = AntSAT.generateRandomAnt(instance);
 
     }
 
@@ -50,6 +46,16 @@ public class ACSSAT extends ACS<SATSolution>
     public boolean isValidSolution(SATSolution solution)
     {
         return solution.getEvaluation() == 0;
+    }
+
+    @Override
+    public void initAnts()
+    {
+        for (int i = 0; i < numberOfAnts; i++)
+        {
+            AntSATACS ant = new AntSATACS(instance, q);
+            ants.add(ant);
+        }
     }
 
     @Override

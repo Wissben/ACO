@@ -1,7 +1,7 @@
 package SATDpendencies;
 
 import java.util.BitSet;
-import java.util.LinkedList;
+import java.util.TreeSet;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -33,9 +33,9 @@ public class SATSolution
     }
 
 
-    public LinkedList<Integer> getVariablesOfClause(int clause)
+    public TreeSet<Integer> getVariablesOfClause(int clause)
     {
-        LinkedList<Integer> vars = new LinkedList<>();
+        TreeSet<Integer> vars = new TreeSet<>();
         for (int i = 0; i < this.length(); i++)
         {
             int invLit = get(i) ? 0 : 1;
@@ -46,9 +46,9 @@ public class SATSolution
     }
 
 
-    public LinkedList<Integer> getUnsatisfiedClauses()
+    public TreeSet<Integer> getUnsatisfiedClauses()
     {
-        LinkedList<Integer> unsatisfied = new LinkedList<>();
+        TreeSet<Integer> unsatisfied = new TreeSet<>();
         for (int i = 0; i < instance.getNumberOfClauses(); i++)
         {
             if (clauseSatisfied(i))
@@ -160,8 +160,7 @@ public class SATSolution
 
     public double getEvaluation()
     {
-//        if (evaluation == -1)
-            evaluation = instance.getNumberOfClauses() - instance.getNumberOfClausesSatisfied(this);
+        evaluation = instance.getNumberOfClauses() - instance.getNumberOfClausesSatisfied(this);
         return evaluation;
     }
 
